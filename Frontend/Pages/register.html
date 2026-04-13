@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - PCB Ordering</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            PCB <span>Ordering</span>
+        </div>
+        <nav class="nav">
+            <div class="auth-section" id="authButtons"></div>
+        </nav>
+    </header>
+
+    <div class="main" style="flex:1; display:flex; justify-content:center; align-items:center; padding:2rem;">
+        <div class="form-container">
+            <h1>Создать аккаунт</h1>
+            <p class="subtitle">Заполните форму для регистрации</p>
+
+            <div id="regError" class="error"></div>
+
+            <div class="form-group">
+                <label for="regName">Имя</label>
+                <input type="text" id="regName" placeholder="Введите имя">
+            </div>
+
+            <div class="form-group">
+                <label for="regSurname">Фамилия</label>
+                <input type="text" id="regSurname" placeholder="Введите фамилию">
+            </div>
+
+            <div class="form-group">
+                <label for="regEmail">Email</label>
+                <input type="email" id="regEmail" placeholder="example@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="regCountry">Страна</label>
+                <select id="regCountry">
+                    <option value="">Выберите страну</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="regPassword">Пароль</label>
+                <input type="password" id="regPassword" placeholder="Минимум 6 символов">
+            </div>
+
+            <button class="btn-form" onclick="handleRegister()">Зарегистрироваться</button>
+
+            <div class="form-link">
+                Уже есть аккаунт? <a href="login.html">Войти</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Практиканты ООО "Асандра"</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        async function handleRegister() {
+            const name = document.getElementById("regName").value.trim();
+            const surname = document.getElementById("regSurname").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const password = document.getElementById("regPassword").value.trim();
+            const idCountry = document.getElementById("regCountry").value;
+            const errorDiv = document.getElementById("regError");
+
+            errorDiv.style.display = "none";
+
+            if (!name || !surname || !email || !password || !idCountry) {
+                errorDiv.textContent = "Пожалуйста, заполните все поля";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                errorDiv.textContent = "Введите корректный email";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            if (password.length < 6) {
+                errorDiv.textContent = "Пароль должен быть минимум 6 символов";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                await register(name, surname, email, password, idCountry);
+            } catch (err) {
+                errorDiv.textContent = err.message;
+                errorDiv.style.display = "block";
+            }
+        }
+
+        loadCountries();
+    </script>
+</body>
+</html>

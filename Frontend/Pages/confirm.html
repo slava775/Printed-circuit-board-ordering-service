@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение Email - PCB Ordering</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            PCB <span>Ordering</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html">Главная</a>
+            <a href="products.html">Каталог</a>
+            <a href="#">О нас</a>
+            <a href="#">Контакты</a>
+        </nav>
+        <div class="auth-section" id="authButtons"></div>
+    </header>
+
+    <div class="main" style="flex:1; display:flex; justify-content:center; align-items:center; padding:2rem;">
+        <div class="form-container">
+            <h1>Подтверждение email</h1>
+            <p class="subtitle">Введите код из письма</p>
+
+            <div id="emailInfo" class="email-info" style="background:#edf2f7; padding:0.75rem; border-radius:5px; margin-bottom:1.5rem; text-align:center;"></div>
+
+            <div id="confirmError" class="error"></div>
+            <div id="confirmSuccess" class="success"></div>
+
+            <div class="form-group">
+                <input type="text" id="code" class="code-input" placeholder="000000" maxlength="6" style="text-align:center; letter-spacing:8px; font-size:1.25rem;">
+            </div>
+
+            <button class="btn-form" onclick="handleConfirm()">Подтвердить</button>
+
+            <div class="form-link">
+                Не получили письмо?
+                <button class="resend-btn" onclick="handleResend()" style="background:none; border:none; color:#2c5282; cursor:pointer; font-weight:500;">Отправить повторно</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Практиканты ООО "Асандра"</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        const email = localStorage.getItem("pendingEmail") || "";
+
+        if (!email) {
+            alert("Ошибка: email для подтверждения не найден. Пожалуйста, зарегистрируйтесь заново.");
+            window.location.href = "register.html";
+        }
+
+        document.getElementById("emailInfo").innerHTML = `Код отправлен на <strong>${email}</strong>`;
+
+        async function handleConfirm() {
+            const code = document.getElementById("code").value.trim();
+            const errorDiv = document.getElementById("confirmError");
+            const successDiv = document.getElementById("confirmSuccess");
+
+            errorDiv.style.display = "none";
+            successDiv.style.display = "none";
+
+            if (!code || code.length !== 6 || !/^\d{6}$/.test(code)) {
+                errorDiv.textContent = "Введите корректный 6-значный код";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                await confirmEmail(email, code);
+                successDiv.textContent = "Email успешно подтвержден! Перенаправление...";
+                successDiv.style.display = "block";
+                setTimeout(() => {
+                    window.location.href = "../pages/home.html";
+                }, 2000);
+            } catch (err) {
+                errorDiv.textContent = err.message;
+                errorDiv.style.display = "block";
+            }
+        }
+
+        async function handleResend() {
+            const errorDiv = document.getElementById("confirmError");
+            const successDiv = document.getElementById("confirmSuccess");
+            const btn = event.target;
+
+            errorDiv.style.display = "none";
+            successDiv.style.display = "none";
+            btn.disabled = true;
+            btn.textContent = "Отправка...";
+
+            try {
+                await resendCode(email);
+                successDiv.textContent = "Код подтверждения отправлен повторно! Проверьте почту.";
+                successDiv.style.display = "block";
+            } catch (err) {
+                errorDiv.textContent = err.message;
+                errorDiv.style.display = "block";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Отправить повторно";
+            }
+        }
+    </script>
+</body>
+</html>

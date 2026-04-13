@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - PCB Ordering</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            PCB <span>Ordering</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html">Главная</a>
+            <a href="products.html">Каталог</a>
+            <a href="#">О нас</a>
+            <a href="#">Контакты</a>
+        </nav>
+        <div class="auth-section" id="authButtons"></div>
+    </header>
+
+    <div class="main" style="flex:1; max-width:900px; margin:0 auto; padding:2rem; width:100%;">
+        <div class="profile-header">
+            <h1>Личный кабинет</h1>
+            <a href="products.html" class="btn-hero-primary" style="width:auto; padding:0.6rem 1.5rem;">Новый заказ</a>
+        </div>
+
+        <div class="profile-content">
+            <div class="profile-section">
+                <h3>Мои данные</h3>
+                <div class="profile-info" id="profileInfo">
+                    <p><strong>Имя:</strong> <span id="userName">Загрузка...</span></p>
+                    <p><strong>Email:</strong> <span id="userEmail">Загрузка...</span></p>
+                    <p><strong>Страна:</strong> <span id="userCountry">Загрузка...</span></p>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h3>Мои заказы</h3>
+                <div class="orders-list" id="ordersList">
+                    <div class="empty-state">Загрузка заказов...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Практиканты ООО "Асандра"</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        async function loadOrders() {
+            const token = localStorage.getItem("accessToken");
+            const container = document.getElementById("ordersList");
+
+            if (!token) {
+                container.innerHTML = '<div class="empty-state">Необходимо войти в систему</div>';
+                return;
+            }
+
+            try {
+                const orders = await apiRequest(`${API_BASE_URL}/orders`);
+                
+                if (orders.length === 0) {
+                    container.innerHTML = '<div class="empty-state">У вас пока нет заказов</div>';
+                    return;
+                }
+
+                const statusText = {
+                    'pending': 'Ожидает оплаты',
+                    'processing': 'В производстве',
+                    'shipped': 'Отправлен',
+                    'delivered': 'Доставлен'
+                };
+
+                container.innerHTML = orders.map(order => {
+                    const statusClass = `status-${order.status?.toLowerCase() || 'pending'}`;
+                    return `
+                        <div class="order-item">
+                            <div class="order-number">#${order.orderNumber || order.id}</div>
+                            <div class="order-details">
+                                <div>Сумма: ${(order.totalPrice || 0).toLocaleString('ru-RU')} ₽</div>
+                                <div>Дата: ${new Date(order.createdAt).toLocaleDateString('ru-RU')}</div>
+                            </div>
+                            <span class="order-status ${statusClass}">${statusText[order.status?.toLowerCase()] || order.status}</span>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error("Ошибка загрузки заказов:", error);
+                container.innerHTML = '<div class="empty-state">Не удалось загрузить заказы</div>';
+            }
+        }
+
+        function checkProfileAuth() {
+            const token = localStorage.getItem("accessToken");
+            const authDiv = document.getElementById("authButtons");
+
+            if (!token) {
+                window.location.href = "../pages/index.html";
+                return;
+            }
+
+            let userName = "Пользователь";
+            let userEmail = "";
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                if (payload.name) userName = payload.name;
+                if (payload.email) userEmail = payload.email;
+            } catch (e) {}
+
+            authDiv.innerHTML = `
+                <div class="user-info">
+                    <span class="user-name" onclick="window.location.href='../pages/home.html'">${userName}</span>
+                    <button class="logout-btn" onclick="logout()">Выйти</button>
+                </div>
+            `;
+
+            document.getElementById("userName").textContent = userName;
+            document.getElementById("userEmail").textContent = userEmail;
+            document.getElementById("userCountry").textContent = "Россия";
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkProfileAuth();
+            loadOrders();
+        });
+    </script>
+</body>
+</html>

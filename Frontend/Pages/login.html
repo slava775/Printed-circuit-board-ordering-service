@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - PCB Ordering</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            PCB <span>Ordering</span>
+        </div>
+        <nav class="nav">
+            <div class="auth-section" id="authButtons"></div>
+        </nav>
+    </header>
+
+    <div class="main" style="flex:1; display:flex; justify-content:center; align-items:center; padding:2rem;">
+        <div class="form-container">
+            <h1>Добро пожаловать!</h1>
+            <p class="subtitle">Войдите в свой аккаунт</p>
+
+            <div id="loginError" class="error"></div>
+
+            <div class="form-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="example@email.com">
+            </div>
+
+            <div class="form-group">
+                <label for="loginPassword">Пароль</label>
+                <input type="password" id="loginPassword" placeholder="Введите пароль">
+            </div>
+
+            <button class="btn-form" onclick="handleLogin()">Войти</button>
+
+            <div class="form-link">
+                Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Практиканты ООО "Асандра"</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        async function handleLogin() {
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value.trim();
+            const errorDiv = document.getElementById("loginError");
+
+            errorDiv.style.display = "none";
+
+            if (!email || !password) {
+                errorDiv.textContent = "Пожалуйста, заполните все поля";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                errorDiv.textContent = "Введите корректный email";
+                errorDiv.style.display = "block";
+                return;
+            }
+
+            try {
+                await login(email, password);
+            } catch (err) {
+                errorDiv.textContent = err.message;
+                errorDiv.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html>

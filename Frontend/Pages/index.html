@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCB Ordering — Печатные платы</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            PCB <span>Ordering</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html">Главная</a>
+            <a href="products.html">Каталог</a>
+            <a href="#">О нас</a>
+            <a href="#">Контакты</a>
+        </nav>
+        <div class="auth-section" id="authButtons"></div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Печатные платы <span>быстро и качественно</span></h1>
+            <p>Изготовление прототипов и серийных партий печатных плат любой сложности. От 24 часов.</p>
+            <div class="hero-buttons">
+                <a href="products.html" class="btn-hero-primary">Заказать сейчас</a>
+                <a href="products.html" class="btn-hero-outline">Смотреть каталог</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-value">24ч</div>
+                    <div class="stat-label">Срочное изготовление</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Контроль качества</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">24/7</div>
+                    <div class="stat-label">Поддержка</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="section-title">
+            <h2>Почему выбирают нас</h2>
+            <p>Мы делаем процесс заказа печатных плат максимально простым и прозрачным</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Быстрое производство</h3>
+                <p>Изготовление прототипов от 24 часов. Серийные партии — в оговоренные сроки.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Гарантия качества</h3>
+                <p>Многоступенчатый контроль качества на всех этапах производства.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Техподдержка</h3>
+                <p>Инженеры помогут с проверкой файлов и подбором параметров.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Доставка</h3>
+                <p>Отправляем заказы в любую точку мира через надёжных партнёров.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 Практиканты ООО "Асандра"</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        checkAuth();
+    </script>
+</body>
+</html>

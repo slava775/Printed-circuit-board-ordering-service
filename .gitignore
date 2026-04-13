@@ -1,0 +1,8 @@
+.env
+appsettings.json
+*.user
+*.config
+bin/
+obj/
+node_modules/
+Testing/Testing/appsettings.Development.json

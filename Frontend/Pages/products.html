@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог - PCB Ordering</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            PCB <span>Ordering</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html">Главная</a>
+            <a href="products.html">Каталог</a>
+            <a href="#">О нас</a>
+            <a href="#">Контакты</a>
+        </nav>
+        <div class="auth-section" id="authButtons"></div>
+    </header>
+
+    <div class="main" style="flex:1; max-width:1200px; margin:0 auto; padding:2rem; width:100%;">
+        <div class="catalog-header">
+            <h1>Каталог печатных плат</h1>
+            <p>Выберите плату для вашего проекта</p>
+        </div>
+
+        <div class="filters">
+            <h3>Фильтр по слоям</h3>
+            <div class="filter-group">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="1">1 слой</button>
+                <button class="filter-btn" data-filter="2">2 слоя</button>
+                <button class="filter-btn" data-filter="4">4 слоя</button>
+                <button class="filter-btn" data-filter="6">6 слоёв</button>
+            </div>
+        </div>
+
+        <div id="productsContainer" class="products-grid">
+            <div class="loading">Загрузка товаров...</div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Практиканты ООО "Асандра"</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/products.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            loadProducts();
+            initFilters();
+        });
+    </script>
+</body>
+</html>
