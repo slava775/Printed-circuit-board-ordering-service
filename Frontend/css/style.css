@@ -14,7 +14,6 @@ body {
     flex-direction: column;
 }
 
-/* ===== ШАПКА ===== */
 .header {
     background: #2c5282;
     color: white;
@@ -74,7 +73,6 @@ body {
     cursor: pointer;
 }
 
-/* ===== КНОПКИ В ШАПКЕ ===== */
 .btn-header {
     background: transparent;
     border: 2px solid #4fc3f7;
@@ -110,7 +108,6 @@ body {
     color: white;
 }
 
-/* ===== КНОПКИ НА ГЛАВНОЙ СТРАНИЦЕ (Hero) ===== */
 .btn-hero-primary {
     background: #48bb78;
     color: white;
@@ -152,7 +149,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* ===== КНОПКИ В ФОРМАХ (Авторизация, Регистрация, Подтверждение) ===== */
 .btn-form {
     width: 100%;
     padding: 0.75rem;
@@ -171,7 +167,6 @@ body {
     background: #1e3a5f;
 }
 
-/* ===== КНОПКА ЗАКАЗАТЬ В КАРТОЧКЕ ТОВАРА ===== */
 .btn-order {
     width: 100%;
     padding: 0.6rem;
@@ -189,7 +184,6 @@ body {
     background: #1e3a5f;
 }
 
-/* ===== ФОРМЫ ===== */
 .form-container {
     background: white;
     padding: 2rem;
@@ -277,7 +271,6 @@ body {
     text-decoration: underline;
 }
 
-/* ===== КАТАЛОГ ===== */
 .catalog-header {
     margin-bottom: 2rem;
     text-align: center;
@@ -417,7 +410,6 @@ body {
     grid-column: 1 / -1;
 }
 
-/* ===== ГЛАВНАЯ СТРАНИЦА (Hero секция) ===== */
 .hero {
     background: #2c5282;
     color: white;
@@ -477,7 +469,6 @@ body {
     opacity: 0.9;
 }
 
-/* ===== СЕКЦИЯ ПРЕИМУЩЕСТВ ===== */
 .features {
     padding: 4rem 2rem;
     background: white;
@@ -527,7 +518,6 @@ body {
     font-size: 0.95rem;
 }
 
-/* ===== ПОДВАЛ ===== */
 .footer {
     background: #2c5282;
     color: #cbd5e0;
@@ -536,7 +526,6 @@ body {
     margin-top: auto;
 }
 
-/* ===== ЛИЧНЫЙ КАБИНЕТ ===== */
 .profile-header {
     background: white;
     padding: 1.5rem;
@@ -587,7 +576,6 @@ body {
     color: #2c5282;
 }
 
-/* ===== АДАПТИВНОСТЬ ===== */
 @media (max-width: 768px) {
     .header {
         padding: 1rem;

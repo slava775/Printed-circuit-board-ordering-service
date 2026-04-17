@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали товара - PCB Ordering</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .product-detail {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        .product-image-large {
+            height: 300px;
+            background: #2c5282;
+            background-size: cover;
+            background-position: center;
+            display: block;
+        }
+        .product-info-large {
+            padding: 2rem;
+        }
+        .product-title-large {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2c5282;
+            margin-bottom: 1rem;
+        }
+        .product-price-large {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5282;
+            margin-bottom: 1rem;
+        }
+        .product-description-large {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            background: #f7fafc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .specs-table tr {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .specs-table tr:last-child {
+            border-bottom: none;
+        }
+        .specs-table td {
+            padding: 0.75rem 1rem;
+        }
+        .spec-label {
+            font-weight: 600;
+            color: #2c5282;
+            width: 40%;
+            background: #edf2f7;
+        }
+        .order-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .quantity-input {
+            width: 100px;
+            padding: 0.5rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .btn-order-large {
+            padding: 0.75rem 2rem;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .btn-order-large:hover {
+            background: #38a169;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #2c5282;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .error {
+            background: #fef2f2;
+            color: #c53030;
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            display: none;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo" onclick="window.location.href='index.html'">
+        PCB <span>Ordering</span>
+    </div>
+    <nav class="nav">
+        <a href="index.html">Главная</a>
+        <a href="products.html">Каталог</a>
+        <a href="#">О нас</a>
+        <a href="#">Контакты</a>
+    </nav>
+    <div class="auth-section" id="authButtons"></div>
+</header>
+
+<div class="main" style="flex:1; max-width: 900px; margin: 0 auto; padding: 2rem; width: 100%;">
+    <div id="productContainer">
+        <div class="loading">Загрузка...</div>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>© 2026 Практиканты ООО "Асандра"</p>
+</footer>
+
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+
+<script>
+const productId = new URLSearchParams(window.location.search).get('id');
+
+if (!productId) {
+    window.location.href = 'products.html';
+}
+
+async function loadProduct() {
+    const container = document.getElementById("productContainer");
+
+    try {
+        const product = await apiRequest(`${API_BASE_URL}/products/${productId}`);
+        const spec = product.specification || {};
+
+        const imageUrl = product.imageUrl
+            ? product.imageUrl
+            : 'https://via.placeholder.com/600x300/2c5282/white?text=PCB';
+
+        container.innerHTML = `
+            <div class="product-detail">
+                <div class="product-image-large" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;"></div>
+
+                <div class="product-info-large">
+                    <h1 class="product-title-large">${escapeHtml(product.name) || 'Печатная плата'}</h1>
+                    <div class="product-price-large">${(product.price || 0).toLocaleString('ru-RU')} ₽</div>
+                    <div class="product-description-large">${escapeHtml(product.description) || ''}</div>
+
+                    <table class="specs-table">
+                        <tr><td class="spec-label">Количество слоёв</td><td>${spec.layers || '—'}</td></tr>
+                        <tr><td class="spec-label">Размеры</td><td>${spec.width && spec.height ? `${spec.width} × ${spec.height} мм` : '—'}</td></tr>
+                        <tr><td class="spec-label">Толщина платы</td><td>${spec.thickness ? `${spec.thickness} мм` : '—'}</td></tr>
+                        <tr><td class="spec-label">Толщина меди</td><td>${spec.copperThickness ? `${spec.copperThickness} унц` : '—'}</td></tr>
+                        <tr><td class="spec-label">Материал</td><td>${spec.material || '—'}</td></tr>
+                        <tr><td class="spec-label">Цвет паяльной маски</td><td>${spec.solderMaskColor || '—'}</td></tr>
+                        <tr><td class="spec-label">Финишное покрытие</td><td>${spec.surfaceFinish || '—'}</td></tr>
+                    </table>
+
+                    <div class="order-section">
+                        <label>Количество:</label>
+                        <input type="number" id="quantity" class="quantity-input" min="1" value="1">
+                        <button class="btn-order-large" onclick="createOrder()">Заказать</button>
+                    </div>
+
+                    <div id="orderError" class="error"></div>
+
+                    <a href="products.html" class="back-link">← Вернуться к каталогу</a>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        console.error(error);
+        container.innerHTML = '<div class="loading">Ошибка загрузки товара</div>';
+    }
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+async function createOrder() {
+    const quantity = parseInt(document.getElementById("quantity").value);
+    const token = localStorage.getItem("accessToken");
+    const errorDiv = document.getElementById("orderError");
+
+    errorDiv.style.display = "none";
+
+    if (!token) {
+        if (confirm("Для заказа необходимо войти в аккаунт. Перейти на страницу входа?")) {
+            window.location.href = "login.html";
+        }
+        return;
+    }
+
+    if (!quantity || quantity < 1) {
+        errorDiv.textContent = "Введите корректное количество";
+        errorDiv.style.display = "block";
+        return;
+    }
+
+    try {
+        const order = await apiRequest(`${API_BASE_URL}/orders`, {
+            method: "POST",
+            body: JSON.stringify({
+                idProduct: parseInt(productId),
+                quantity: quantity
+            })
+        });
+
+        alert(`Заказ #${order.orderNumber} успешно создан! Сумма: ${order.totalPrice.toLocaleString('ru-RU')} ₽`);
+        window.location.href = "home.html";
+    } catch (error) {
+        errorDiv.textContent = error.message || "Ошибка создания заказа";
+        errorDiv.style.display = "block";
+    }
+}
+
+checkAuth();
+loadProduct();
+</script>
+
+</body>
+</html>

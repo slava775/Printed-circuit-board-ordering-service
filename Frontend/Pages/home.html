@@ -5,6 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Личный кабинет - PCB Ordering</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .order-status {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-processing { background: #dbeafe; color: #1e40af; }
+        .status-shipped { background: #d1fae5; color: #065f46; }
+        .status-delivered { background: #ede9fe; color: #5b21b6; }
+        .order-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .order-item:last-child { border-bottom: none; }
+        .order-number { font-weight: 600; color: #2c5282; margin-bottom: 0.25rem; }
+        .order-details { font-size: 0.9rem; color: #718096; }
+        .empty-state { text-align: center; padding: 2rem; color: #718096; }
+        .profile-header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 1.5rem;
+        }
+        .profile-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        .profile-section h3 {
+            color: #2c5282;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .profile-info p {
+            padding: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+        @media (max-width: 768px) {
+            .profile-content { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
@@ -21,7 +78,7 @@
         <div class="auth-section" id="authButtons"></div>
     </header>
 
-    <div class="main" style="flex:1; max-width:900px; margin:0 auto; padding:2rem; width:100%;">
+    <div class="main" style="flex:1; max-width: 1000px; margin: 0 auto; padding: 2rem; width: 100%;">
         <div class="profile-header">
             <h1>Личный кабинет</h1>
             <a href="products.html" class="btn-hero-primary" style="width:auto; padding:0.6rem 1.5rem;">Новый заказ</a>
@@ -39,7 +96,7 @@
 
             <div class="profile-section">
                 <h3>Мои заказы</h3>
-                <div class="orders-list" id="ordersList">
+                <div id="ordersList">
                     <div class="empty-state">Загрузка заказов...</div>
                 </div>
             </div>
@@ -70,26 +127,38 @@
                     return;
                 }
 
-                const statusText = {
-                    'pending': 'Ожидает оплаты',
-                    'processing': 'В производстве',
-                    'shipped': 'Отправлен',
-                    'delivered': 'Доставлен'
+                const getStatusClass = (status) => {
+                    switch(status) {
+                        case 'pending': return 'status-pending';
+                        case 'processing': return 'status-processing';
+                        case 'shipped': return 'status-shipped';
+                        case 'delivered': return 'status-delivered';
+                        default: return 'status-pending';
+                    }
                 };
 
-                container.innerHTML = orders.map(order => {
-                    const statusClass = `status-${order.status?.toLowerCase() || 'pending'}`;
-                    return `
-                        <div class="order-item">
-                            <div class="order-number">#${order.orderNumber || order.id}</div>
-                            <div class="order-details">
-                                <div>Сумма: ${(order.totalPrice || 0).toLocaleString('ru-RU')} ₽</div>
-                                <div>Дата: ${new Date(order.createdAt).toLocaleDateString('ru-RU')}</div>
-                            </div>
-                            <span class="order-status ${statusClass}">${statusText[order.status?.toLowerCase()] || order.status}</span>
+                const getStatusText = (status) => {
+                    switch(status) {
+                        case 'pending': return 'Ожидает оплаты';
+                        case 'processing': return 'В производстве';
+                        case 'shipped': return 'Отправлен';
+                        case 'delivered': return 'Доставлен';
+                        default: return status || 'Неизвестно';
+                    }
+                };
+
+                container.innerHTML = orders.map(order => `
+                    <div class="order-item">
+                        <div class="order-number">${order.orderNumber}</div>
+                        <div class="order-details">
+                            <div>Товар: ${order.productName || 'Печатная плата'}</div>
+                            <div>Количество: ${order.quantity}</div>
+                            <div>Сумма: ${(order.totalPrice || 0).toLocaleString('ru-RU')} ₽</div>
+                            <div>Дата: ${new Date(order.createdAt).toLocaleDateString('ru-RU')}</div>
                         </div>
-                    `;
-                }).join('');
+                        <span class="order-status ${getStatusClass(order.status)}">${getStatusText(order.status)}</span>
+                    </div>
+                `).join('');
             } catch (error) {
                 console.error("Ошибка загрузки заказов:", error);
                 container.innerHTML = '<div class="empty-state">Не удалось загрузить заказы</div>';

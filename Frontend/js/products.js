@@ -36,22 +36,43 @@ function renderProducts(products) {
         if (spec.layers) specs.push(`${spec.layers} слоя`);
         if (spec.thickness) specs.push(`${spec.thickness} мм`);
         if (spec.material) specs.push(spec.material);
+
+        const productName = (product.name || 'Печатная плата').replace(/'/g, "\\'");
         
         return `
             <div class="product-card">
-                <div class="product-image">PCB</div>
+                <div class="product-image" onclick="window.location.href='product-details.html?id=${product.idProduct}'" style="cursor:pointer;">PCB</div>
                 <div class="product-info">
-                    <div class="product-title">${product.name || 'Печатная плата'}</div>
+                    <div class="product-title" onclick="window.location.href='product-details.html?id=${product.idProduct}'" style="cursor:pointer;">${product.name || 'Печатная плата'}</div>
                     <div class="product-description">${product.description || 'Качественная печатная плата для ваших проектов'}</div>
                     <div class="product-specs">
                         ${specs.map(s => `<span class="spec-tag">${s}</span>`).join('')}
                     </div>
                     <div class="product-price">${(product.price || 0).toLocaleString('ru-RU')} ₽</div>
-                    <button class="btn-order" onclick="orderProduct(${product.idProduct || product.id})">Заказать</button>
-                </div>
+                    <button class="btn-order" onclick="window.location.href='product-details.html?id=${product.idProduct}'">Подробнее</button>
             </div>
         `;
     }).join('');
+}
+
+function addToCart(idProduct, name, price) {
+    let cart = localStorage.getItem("cart");
+    cart = cart ? JSON.parse(cart) : [];
+    
+    const existing = cart.find(item => item.idProduct === idProduct);
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        cart.push({
+            idProduct: idProduct,
+            name: name,
+            price: price,
+            quantity: 1
+        });
+    }
+    
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`Товар "${name}" добавлен в корзину`);
 }
 
 function filterProducts(layers, event) {
@@ -69,17 +90,6 @@ function filterProducts(layers, event) {
         });
         renderProducts(filtered);
     }
-}
-
-function orderProduct(productId) {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-        if (confirm("Для заказа необходимо войти в аккаунт. Перейти на страницу входа?")) {
-            window.location.href = "pages/login.html";
-        }
-        return;
-    }
-    alert(`Товар #${productId} добавлен в корзину. Функция в разработке.`);
 }
 
 function initFilters() {
