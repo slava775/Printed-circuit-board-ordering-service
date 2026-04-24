@@ -271,7 +271,6 @@
         }
 
         container.innerHTML = products.map(product => {
-            // Используем FILES_BASE_URL для фото (как работало раньше)
             const imageUrl = product.imageUrl ? `${FILES_BASE_URL}${product.imageUrl}` : 'https://via.placeholder.com/300x200/2c5282/white?text=PCB';
             const spec = product.specification || {};
 
