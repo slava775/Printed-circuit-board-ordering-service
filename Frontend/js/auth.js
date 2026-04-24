@@ -1,4 +1,3 @@
-// ===== АВТОРИЗАЦИЯ =====
 function checkAuth() {
     const token = localStorage.getItem("accessToken");
     const authDiv = document.getElementById("authButtons");
@@ -19,11 +18,9 @@ function checkAuth() {
             </div>
         `;
     } else {
-        // Определяем, на какой странице мы находимся, чтобы ссылки вели правильно
         const currentPage = window.location.pathname.split('/').pop();
         
         if (currentPage === 'login.html' || currentPage === 'register.html' || currentPage === 'confirm.html') {
-            // На страницах авторизации показываем только кнопки (ссылки не нужны, они уже на своих страницах)
             authDiv.innerHTML = `
                 <button class="btn-header" onclick="window.location.href='login.html'">Вход</button>
                 <button class="btn-header" onclick="window.location.href='register.html'">Регистрация</button>

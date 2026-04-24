@@ -51,12 +51,14 @@ internal class Program
         builder.Services.AddScoped<IMailRepository, MailRepository>();
         builder.Services.AddScoped<IProductRepository, ProductRepository>();
         builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
         // Регистрация сервисов
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IEmailService, EmailService>();
         builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddScoped<IOrderService, OrderService>();
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
 
         // Настройки SMTP
         builder.Services.Configure<SmtpSettings>(

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Testing.Domain.DTOs.Categories;
 using Testing.Domain.DTOs.Orders;
 using Testing.Domain.DTOs.Products;
 using Testing.Domain.Entities;
@@ -18,5 +19,7 @@ public class MappingProfile : Profile
         CreateMap<Order, OrderDTO>()
             .ForMember(dest => dest.ProductName, opt => opt.Ignore())
             .ForMember(dest => dest.StatusText, opt => opt.Ignore());
+
+        CreateMap<Category, CategoryDTO>();
     }
 }
