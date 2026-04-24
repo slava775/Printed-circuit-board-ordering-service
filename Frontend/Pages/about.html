@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас - PCB Ordering</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .about-hero {
+            background: #2c5282;
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .about-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .about-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .about-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .about-card h2 {
+            color: #2c5282;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        .about-card p {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        .features-list {
+            list-style: none;
+            padding: 0;
+        }
+        .features-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #4a5568;
+        }
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+        .features-list li::before {
+            content: "✓";
+            color: #48bb78;
+            font-weight: bold;
+            margin-right: 0.75rem;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .stat-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c5282;
+        }
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo" onclick="window.location.href='index.html'">
+            PCB <span>Ordering</span>
+        </div>
+        <nav class="nav">
+            <a href="index.html">Главная</a>
+            <a href="products.html">Каталог</a>
+            <a href="about.html">О нас</a>
+            <a href="contacts.html">Контакты</a>
+        </nav>
+        <div class="auth-section" id="authButtons"></div>
+    </header>
+
+    <div class="main" style="flex:1; max-width: 1200px; margin: 0 auto; padding: 2rem; width: 100%;">
+        
+        <div class="about-hero">
+            <h1>О компании</h1>
+            <p>Мы занимаемся производством и поставкой качественных печатных плат с 2024 года. Наша цель — сделать процесс заказа максимально простым и удобным.</p>
+        </div>
+
+        <div class="about-content">
+            <div class="about-card">
+                <h2>О печатных платах</h2>
+                <p>Печатная плата (ПП) — это основа любого электронного устройства. Она обеспечивает механическое крепление и электрическое соединение компонентов.</p>
+                <p>Мы предлагаем платы различных типов:</p>
+                <ul class="features-list">
+                    <li>Односторонние (1 слой) — для простых проектов</li>
+                    <li>Двухсторонние (2 слоя) — для большинства устройств</li>
+                    <li>Многослойные (4+, 6+ слоёв) — для сложной электроники</li>
+                    <li>Алюминиевые — для светодиодной техники</li>
+                </ul>
+            </div>
+            
+            <div class="about-card">
+                <h2>Технологии</h2>
+                <p>Мы используем современные материалы и технологии производства:</p>
+                <ul class="features-list">
+                    <li>FR4 — стандартный материал для большинства плат</li>
+                    <li>HASL / ENIG — финишные покрытия для пайки</li>
+                    <li>Паяльная маска — защита дорожек (зелёная, красная, синяя)</li>
+                    <li>Лазерная сверловка — высокая точность отверстий</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number">1000+</div>
+                <div class="stat-label">Выполненных заказов</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Довольных клиентов</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Техподдержка</div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Практиканты ООО "Асандра"</p>
+    </footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        checkAuth();
+    </script>
+</body>
+</html>
